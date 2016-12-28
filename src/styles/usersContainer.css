@@ -1,0 +1,13 @@
+.new-rule-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.new-rule-btn {
+    padding: 10px 20px 10px 20px;
+    background: #65BC65;
+    border: 2px solid #65BC65;
+    border-radius: 2px;
+    color: white;
+    font-size: 1rem;
+}

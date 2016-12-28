@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import '../styles/usersList.css';
+import trashIcon from '../images/trashcan.svg';
+import penIcon from '../images/pen.svg';
 
 class UserListItem extends Component {
 
@@ -21,10 +23,14 @@ class UserListItem extends Component {
   renderListItem(userData) {
     return (
       <div key={userData.uuid} className="user-list-content">
-        <span>Filtering </span>
-        <span className="highlighted-item list-source">{userData.source}</span>
-        <span>to </span>
-        <span className="highlighted-item list-target">{userData.target}</span>
+        <div className="inline">
+          <span>Filtering </span>
+          <span className="highlighted-item list-source">{userData.source}</span>
+          <span>to </span>
+          <span className="highlighted-item list-target">{userData.target}</span>
+        </div>
+        <img src={trashIcon} className="inline list-img" alt="DELETE" />
+        <img src={penIcon} className="inline list-img" alt="EDIT" />
       </div>
     );
   }

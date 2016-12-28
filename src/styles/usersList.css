@@ -18,7 +18,17 @@
 
 .user-list-content {
     padding-left: 10px;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.list-img {
+    height: 15px;
+    float: right;
+    margin-right: 5px;
 }
 
 .list-server {

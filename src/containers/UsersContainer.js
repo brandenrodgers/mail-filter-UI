@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import UserListItem from '../components/UserListItem';
+import '../styles/usersContainer.css';
 
 class UsersContainer extends Component {
 
@@ -8,7 +9,9 @@ class UsersContainer extends Component {
     const {users} = this.props;
     return (
       <div>
-        <input type="submit" value="Add new rule" />
+        <div className="new-rule-btn-wrapper">
+          <button className="new-rule-btn">Add rule</button>
+        </div>
         {Object.keys(users).map(key => <UserListItem key={key} username={key} userData={users[key]} />)}
       </div>
     );
