@@ -1,0 +1,19 @@
+.app-header {
+    margin: 0;
+    height: 50px;
+    padding: 10px;
+    font-size: 2rem;
+    line-height: 50px;
+    color: #175676;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+.app-header-text {
+    vertical-align: text-top;
+}
+
+.mail-icon {
+    vertical-align: sub;
+    height: 50px;
+    padding: 0 25px 0 10px;
+}

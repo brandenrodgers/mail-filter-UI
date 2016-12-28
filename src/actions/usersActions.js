@@ -1,30 +1,21 @@
 import actionTypes from './types';
 import axios from 'axios';
 
-export const updateName = (name) => {
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.UPDATE_NAME,
-      name
-    });
-  }
-};
-
-export const getUserList = () => {
+export const getUsersList = () => {
   return (dispatch) => {
     dispatch({
       type: actionTypes.LIST_REQUESTED
     });
-    axios.get('http://raspberrypi:5000/list', {
+    axios.get('http://172.16.11.128:5000/list', {
         auth: {
           username: 'admin',
-          password: 'dangerous'
+          password: 'admin'
         }
       })
       .then((response) => {
         dispatch({
           type: actionTypes.LIST_RECEIVED,
-          usersList: response.data.data
+          users: response.data.data
         })
       })
       .catch((error) => {
