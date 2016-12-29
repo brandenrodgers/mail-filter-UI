@@ -6,10 +6,10 @@ export const getUsersList = () => {
     dispatch({
       type: actionTypes.LIST_REQUESTED
     });
-    axios.get('http://172.16.11.128:5000/list', {
+    axios.get('http://raspberrypi:5000/list', {
         auth: {
           username: 'admin',
-          password: 'admin'
+          password: 'dangerous'
         }
       })
       .then((response) => {

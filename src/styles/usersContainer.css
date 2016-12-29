@@ -5,9 +5,20 @@
 
 .new-rule-btn {
     padding: 10px 20px 10px 20px;
-    background: #65BC65;
-    border: 2px solid #65BC65;
+    background-color: #175676;
+    border: 2px solid #4BA3C3;
     border-radius: 2px;
     color: white;
     font-size: 1rem;
+}
+
+.new-rule-btn:hover {
+    cursor: pointer;
+    border: 2px solid #175676;
+}
+
+.big-message {
+    padding: 30px;
+    font-size: 1.5rem;
+    color: #BA324F;
 }

@@ -1,10 +1,11 @@
 import actionTypes from '../actions/types';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
+import {Map, fromJS} from 'immutable';
 
 const initialState = {
-  request: 'uninitialized',
-  users: {},
-  errors: {}
+  request: RequestStatusTypes.UNINITIALIZED,
+  users: new Map(),
+  errors: new Map()
 };
 
 export default (state = initialState, action) => {
@@ -12,7 +13,8 @@ export default (state = initialState, action) => {
     case actionTypes.LIST_REQUESTED:
       return {...state, request: RequestStatusTypes.PENDING};
     case actionTypes.LIST_RECEIVED:
-      return {...state, users: action.users, request: RequestStatusTypes.SUCCEEDED};
+      const users = fromJS(action.users);
+      return {...state, users, request: RequestStatusTypes.SUCCEEDED};
     case actionTypes.LIST_FAILED:
       return {...state, errors: action.error, request: RequestStatusTypes.FAILED};
     default:

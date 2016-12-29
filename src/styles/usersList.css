@@ -4,7 +4,12 @@
     padding-left: 10px;
 }
 
+.small-margin {
+    margin: 10px 0 10px 0 !important;
+}
+
 .user-list-header {
+    display: inline-block;
     margin-bottom: 10px;
     color: #BA324F;
     font-size: 1.5rem;
@@ -14,11 +19,14 @@
 
 .user-list-header:hover {
     cursor: pointer;
+    color: #D62839;
 }
 
 .user-list-content {
-    padding-left: 10px;
+    margin-left: 10px;
     margin-bottom: 10px;
+    border-bottom: 1px solid #175676;
+    padding-bottom: 3px;
 }
 
 .inline {
@@ -28,7 +36,14 @@
 .list-img {
     height: 15px;
     float: right;
-    margin-right: 5px;
+    margin-right: 8px;
+    padding: 2px;
+}
+
+.list-img:hover {
+    cursor: pointer;
+    background-color: #4BA3C3;
+    border-radius: 2px;
 }
 
 .list-server {
@@ -39,12 +54,13 @@
 .highlighted-item {
     border-radius: 3px;
     margin-right: 3px;
+    padding: 1px 3px 1px 3px;
 }
 
 .list-source {
-    background-color: #4BA3C3;
+    background-color: #7be0cd;
 }
 
 .list-target {
-    background-color: #EDB74B;
+    background-color: #a79bdf;
 }

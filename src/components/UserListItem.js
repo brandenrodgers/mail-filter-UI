@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {List} from 'immutable';
 import '../styles/usersList.css';
 import trashIcon from '../images/trashcan.svg';
 import penIcon from '../images/pen.svg';
@@ -10,8 +11,8 @@ class UserListItem extends Component {
     this.state = {
       showItems: true
     };
-    this.renderListItem = this.renderListItem.bind(this);
-    this.renderData = this.renderData.bind(this);
+    this.renderRule = this.renderRule.bind(this);
+    this.renderRuleGroup = this.renderRuleGroup.bind(this);
     this.toggleShowItem = this.toggleShowItem.bind(this);
   }
 
@@ -20,14 +21,14 @@ class UserListItem extends Component {
     this.setState({showItems: !showItems});
   }
 
-  renderListItem(userData) {
+  renderRule(rule) {
     return (
-      <div key={userData.uuid} className="user-list-content">
+      <div key={rule.get('uuid')} className="user-list-content">
         <div className="inline">
           <span>Filtering </span>
-          <span className="highlighted-item list-source">{userData.source}</span>
+          <span className="highlighted-item list-source">{rule.get('source')}</span>
           <span>to </span>
-          <span className="highlighted-item list-target">{userData.target}</span>
+          <span className="highlighted-item list-target">{rule.get('target')}</span>
         </div>
         <img src={trashIcon} className="inline list-img" alt="DELETE" />
         <img src={penIcon} className="inline list-img" alt="EDIT" />
@@ -35,15 +36,16 @@ class UserListItem extends Component {
     );
   }
 
-  renderData(userData) {
+  renderRuleGroup() {
     const {showItems} = this.state;
+    const {userRuleData} = this.props;
     if (showItems) {
       return (
         <div>
           <div className="list-server">
-            Server: {userData[0].mail_server}
+            Server: {userRuleData.first().get('mail_server')}
           </div>
-          {userData.map(data => this.renderListItem(data))}
+          {userRuleData.entrySeq().map(([key, rule]) => this.renderRule(rule))}
         </div>
       );
     }
@@ -51,13 +53,14 @@ class UserListItem extends Component {
   }
 
   render() {
-    const {username, userData} = this.props;
+    const {showItems} = this.state;
+    const {username} = this.props;
     return (
-      <div className='user-list-item'>
+      <div className={`user-list-item ${showItems ? '' : 'small-margin'}`}>
         <div className="user-list-header" onClick={this.toggleShowItem}>
           {username}
         </div>
-        {this.renderData(userData)}
+        {this.renderRuleGroup()}
       </div>
     );
   }
@@ -65,7 +68,7 @@ class UserListItem extends Component {
 
 UserListItem.propTypes = {
   username: PropTypes.string.isRequired,
-  userData: PropTypes.array.isRequired
+  userRuleData: PropTypes.instanceOf(List).isRequired
 };
 
 export default UserListItem;
