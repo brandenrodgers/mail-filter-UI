@@ -1,31 +1,38 @@
 import React, {PropTypes, Component} from 'react';
 import {Map} from 'immutable';
 import {connect} from 'react-redux';
-import {getUsersList} from '../actions/usersActions';
+import {getRulesList, deleteRule, clearDeleteRuleStatus} from '../actions/rulesActions';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
-import UserListItem from '../components/UserListItem';
+import UserRuleList from '../components/UserRuleList';
 import '../styles/usersContainer.css';
 
 class UsersContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.renderUserList = this.renderUserList.bind(this);
+    this.renderUserRuleList = this.renderUserRuleList.bind(this);
   }
 
   componentWillMount() {
-    const {usersRequestStatus} = this.props;
-    if (usersRequestStatus === RequestStatusTypes.UNINITIALIZED) {
-      this.props.getUsersList();
+    const {rulesRequestStatus} = this.props;
+    if (rulesRequestStatus === RequestStatusTypes.UNINITIALIZED) {
+      this.props.getRulesList();
     }
   }
 
-  renderUserList() {
-    const {users, usersRequestStatus} = this.props;
-    if (usersRequestStatus === RequestStatusTypes.SUCCEEDED) {
+  renderUserRuleList() {
+    const {users, rulesRequestStatus, deleteRule, clearDeleteRuleStatus, deleteRequestStatuses} = this.props;
+    if (rulesRequestStatus === RequestStatusTypes.SUCCEEDED) {
       if (users.size) {
         return users.entrySeq().map(([key, user]) =>
-          <UserListItem key={key} username={key} userRuleData={user}/>
+          <UserRuleList
+            key={key}
+            username={key}
+            userRuleData={user}
+            deleteRule={deleteRule}
+            clearDeleteRuleStatus={clearDeleteRuleStatus}
+            deleteRequestStatuses={deleteRequestStatuses}
+          />
         );
       }
       return <div className="big-message">No current rules</div>;
@@ -39,7 +46,7 @@ class UsersContainer extends Component {
         <div className="new-rule-btn-wrapper">
           <button className="new-rule-btn">Add rule</button>
         </div>
-        {this.renderUserList()}
+        {this.renderUserRuleList()}
       </div>
     );
   }
@@ -47,16 +54,23 @@ class UsersContainer extends Component {
 
 UsersContainer.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
-  usersRequestStatus: PropTypes.string.isRequired
+  rulesRequestStatus: PropTypes.string.isRequired,
+  getRulesList: PropTypes.func.isRequired,
+  deleteRule: PropTypes.func.isRequired,
+  clearDeleteRuleStatus: PropTypes.func.isRequired,
+  deleteRequestStatuses: PropTypes.instanceOf(Map).isRequired
 };
 
 const mapStateToProps = (state, params) => {
   return {
-    users: state.users.users,
-    usersRequestStatus: state.users.request
+    users: state.rules.users,
+    rulesRequestStatus: state.rules.rulesListRequestStatus,
+    deleteRequestStatuses: state.rules.deleteRequestStatuses
   };
 };
 
 export default connect(mapStateToProps, {
-  getUsersList
+  getRulesList,
+  deleteRule,
+  clearDeleteRuleStatus
 })(UsersContainer);

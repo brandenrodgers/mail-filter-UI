@@ -26,24 +26,28 @@
     margin-left: 10px;
     margin-bottom: 10px;
     border-bottom: 1px solid #175676;
-    padding-bottom: 3px;
-}
-
-.inline {
-    display: inline-block;
+    padding-bottom: 1px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .list-img {
     height: 15px;
-    float: right;
     margin-right: 8px;
     padding: 2px;
 }
 
 .list-img:hover {
     cursor: pointer;
-    background-color: #4BA3C3;
     border-radius: 2px;
+}
+
+.pen:hover {
+    background-color: #4BA3C3;
+}
+
+.trashcan:hover {
+    background-color: #BA324F;
 }
 
 .list-server {
@@ -63,4 +67,36 @@
 
 .list-target {
     background-color: #a79bdf;
+}
+
+button {
+    padding: 1px 4px 1px 2px;
+    border-radius: 2px;
+    color: white;
+    font-size: .75rem;
+    margin-right: 5px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button.delete {
+ background-color: #BA324F;
+}
+
+button.delete:disabled {
+    background-color: gainsboro;
+    cursor: not-allowed;
+}
+
+button.cancel {
+    background-color: #175676;
+}
+
+input {
+    line-height: 18px;
+    margin-right: 5px;
+    border-radius: 2px;
+    border: none;
 }
