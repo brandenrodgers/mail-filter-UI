@@ -100,3 +100,9 @@ input {
     border-radius: 2px;
     border: none;
 }
+
+.incorrect-password {
+    color: #BA324F;
+    font-size: .75rem;
+    padding-right: 5px;
+}

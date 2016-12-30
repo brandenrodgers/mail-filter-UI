@@ -19,6 +19,7 @@ class UserRuleListItem extends Component {
     this.toggleShowDeleteRule = this.toggleShowDeleteRule.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.handleDeleteRuleClick = this.handleDeleteRuleClick.bind(this);
+    this.maybeRenderIncorrectPassword = this.maybeRenderIncorrectPassword.bind(this);
   }
 
   toggleShowDeleteRule() {
@@ -40,6 +41,14 @@ class UserRuleListItem extends Component {
     this.props.deleteRule(rule.get('uuid'), password);
   }
 
+  maybeRenderIncorrectPassword() {
+    const {deleteRequestStatus} = this.props;
+    if (deleteRequestStatus === RequestStatusTypes.FAILED) {
+      return <span className="incorrect-password">Incorrect password</span>;
+    }
+    return null;
+  }
+
   renderIcons() {
     const {showDeleteRule, password} = this.state;
     const {deleteRequestStatus} = this.props;
@@ -49,7 +58,7 @@ class UserRuleListItem extends Component {
       }
       return (
         <div>
-          {deleteRequestStatus === RequestStatusTypes.FAILED ? 'Incorrect Password' : null}
+          {this.maybeRenderIncorrectPassword()}
           <input type="password" placeholder="password" onChange={this.updatePassword} />
           <button className="cancel" onClick={this.toggleShowDeleteRule}>Cancel</button>
           <button className="delete" onClick={this.handleDeleteRuleClick} disabled={password.length === 0}>Delete</button>
