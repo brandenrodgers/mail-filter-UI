@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Map} from 'immutable';
+import {connect} from 'react-redux';
+import {deleteRule, clearDeleteRuleStatus} from '../actions/rulesActions';
 import '../styles/usersList.css';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
 import trashIcon from '../images/trashcan.svg';
@@ -48,7 +50,7 @@ class UserRuleListItem extends Component {
       return (
         <div>
           {deleteRequestStatus === RequestStatusTypes.FAILED ? 'Incorrect Password' : null}
-          <input type="text" placeholder="password" onChange={this.updatePassword} />
+          <input type="password" placeholder="password" onChange={this.updatePassword} />
           <button className="cancel" onClick={this.toggleShowDeleteRule}>Cancel</button>
           <button className="delete" onClick={this.handleDeleteRuleClick} disabled={password.length === 0}>Delete</button>
         </div>
@@ -85,4 +87,7 @@ UserRuleListItem.propTypes = {
   deleteRequestStatus: PropTypes.string.isRequired
 };
 
-export default UserRuleListItem;
+export default connect(() => {return {}}, {
+  deleteRule,
+  clearDeleteRuleStatus
+})(UserRuleListItem);

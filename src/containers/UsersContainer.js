@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {Map} from 'immutable';
 import {connect} from 'react-redux';
-import {getRulesList, deleteRule, clearDeleteRuleStatus} from '../actions/rulesActions';
+import {getRulesList} from '../actions/rulesActions';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
 import UserRuleList from '../components/UserRuleList';
 import '../styles/usersContainer.css';
@@ -21,7 +21,7 @@ class UsersContainer extends Component {
   }
 
   renderUserRuleList() {
-    const {users, rulesRequestStatus, deleteRule, clearDeleteRuleStatus, deleteRequestStatuses} = this.props;
+    const {users, rulesRequestStatus, deleteRequestStatuses} = this.props;
     if (rulesRequestStatus === RequestStatusTypes.SUCCEEDED) {
       if (users.size) {
         return users.entrySeq().map(([key, user]) =>
@@ -29,8 +29,6 @@ class UsersContainer extends Component {
             key={key}
             username={key}
             userRuleData={user}
-            deleteRule={deleteRule}
-            clearDeleteRuleStatus={clearDeleteRuleStatus}
             deleteRequestStatuses={deleteRequestStatuses}
           />
         );
@@ -56,8 +54,6 @@ UsersContainer.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
   rulesRequestStatus: PropTypes.string.isRequired,
   getRulesList: PropTypes.func.isRequired,
-  deleteRule: PropTypes.func.isRequired,
-  clearDeleteRuleStatus: PropTypes.func.isRequired,
   deleteRequestStatuses: PropTypes.instanceOf(Map).isRequired
 };
 
@@ -70,7 +66,5 @@ const mapStateToProps = (state, params) => {
 };
 
 export default connect(mapStateToProps, {
-  getRulesList,
-  deleteRule,
-  clearDeleteRuleStatus
+  getRulesList
 })(UsersContainer);

@@ -22,7 +22,7 @@ class UserRuleList extends Component {
 
   renderRuleGroup() {
     const {showItems} = this.state;
-    const {userRuleData, deleteRule, deleteRequestStatuses, clearDeleteRuleStatus} = this.props;
+    const {userRuleData, deleteRequestStatuses} = this.props;
     if (showItems) {
       return (
         <div>
@@ -34,8 +34,6 @@ class UserRuleList extends Component {
             return <UserRuleListItem
               key={key}
               rule={rule}
-              deleteRule={deleteRule}
-              clearDeleteRuleStatus={clearDeleteRuleStatus}
               deleteRequestStatus={deleteStatus}
             />;
           })}
@@ -62,8 +60,6 @@ class UserRuleList extends Component {
 UserRuleList.propTypes = {
   username: PropTypes.string.isRequired,
   userRuleData: PropTypes.instanceOf(List).isRequired,
-  deleteRule: PropTypes.func.isRequired,
-  clearDeleteRuleStatus: PropTypes.func.isRequired,
   deleteRequestStatuses: PropTypes.instanceOf(Map).isRequired
 };
 
