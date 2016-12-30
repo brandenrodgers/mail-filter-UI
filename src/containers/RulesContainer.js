@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {Map} from 'immutable';
 import {connect} from 'react-redux';
-import {getRulesList} from '../actions/rulesActions';
+import {browserHistory} from 'react-router';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
 import UserRuleList from '../components/UserRuleList';
 import '../styles/usersContainer.css';
@@ -11,13 +11,11 @@ class UsersContainer extends Component {
   constructor(props) {
     super(props);
     this.renderUserRuleList = this.renderUserRuleList.bind(this);
+    this.handleAddRuleClick = this.handleAddRuleClick.bind(this);
   }
 
-  componentWillMount() {
-    const {rulesRequestStatus} = this.props;
-    if (rulesRequestStatus === RequestStatusTypes.UNINITIALIZED) {
-      this.props.getRulesList();
-    }
+  handleAddRuleClick() {
+    browserHistory.push('/rule');
   }
 
   renderUserRuleList() {
@@ -40,9 +38,9 @@ class UsersContainer extends Component {
 
   render() {
     return (
-      <div>
-        <div className="new-rule-btn-wrapper">
-          <button className="new-rule-btn">Add rule</button>
+      <div className="centered-content">
+        <div className="flex-end-wrapper">
+          <button className="large-btn new-rule-btn" onClick={this.handleAddRuleClick}>Add rule</button>
         </div>
         {this.renderUserRuleList()}
       </div>
@@ -53,7 +51,6 @@ class UsersContainer extends Component {
 UsersContainer.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
   rulesRequestStatus: PropTypes.string.isRequired,
-  getRulesList: PropTypes.func.isRequired,
   deleteRequestStatuses: PropTypes.instanceOf(Map).isRequired
 };
 
@@ -65,6 +62,4 @@ const mapStateToProps = (state, params) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  getRulesList
-})(UsersContainer);
+export default connect(mapStateToProps)(UsersContainer);

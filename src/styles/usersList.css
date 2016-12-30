@@ -94,13 +94,6 @@ button.cancel {
     background-color: #175676;
 }
 
-input {
-    line-height: 18px;
-    margin-right: 5px;
-    border-radius: 2px;
-    border: none;
-}
-
 .incorrect-password {
     color: #BA324F;
     font-size: .75rem;

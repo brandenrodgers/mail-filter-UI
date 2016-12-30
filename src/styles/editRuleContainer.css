@@ -1,0 +1,21 @@
+
+.form-wrapper {
+    border: 2px solid #175676;
+    background-color: #4BA3C3;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form-wrapper input {
+    margin-left: 5px;
+    height: 20px;
+    flex-grow: 2;
+}
+
+.cancel-btn {
+    background-color: #d1852e;
+    border: 2px solid #4BA3C3;
+    color: white;
+}

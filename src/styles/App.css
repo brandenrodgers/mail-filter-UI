@@ -5,6 +5,59 @@
 
 .app-body {
     height: 100%;
-    padding: 10px 100px 0 100px;
+    display: flex;
+    justify-content: center;
 }
 
+.m-all-20 {
+    margin: 20px;
+}
+
+.m-top-20 {
+    margin-top: 20px;
+}
+
+.m-right-20 {
+    margin-right: 20px;
+}
+
+.flex-wrapper {
+    display: flex;
+}
+
+.flex-end-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.full-flex-basis {
+    flex-basis: 100%;
+}
+
+.flex-basis-40 {
+    flex-basis: 40%;
+}
+
+.big-message {
+    padding: 30px;
+    font-size: 1.5rem;
+    color: #BA324F;
+}
+
+.large-btn {
+    padding: 10px 20px 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.large-btn:hover {
+    cursor: pointer;
+    border: 2px solid #175676;
+}
+
+input {
+    line-height: 18px;
+    margin-right: 5px;
+    border-radius: 2px;
+    border: none;
+}

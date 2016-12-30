@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Map} from 'immutable';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 import {deleteRule, clearDeleteRuleStatus} from '../actions/rulesActions';
 import '../styles/usersList.css';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
@@ -19,6 +20,7 @@ class UserRuleListItem extends Component {
     this.toggleShowDeleteRule = this.toggleShowDeleteRule.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.handleDeleteRuleClick = this.handleDeleteRuleClick.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
     this.maybeRenderIncorrectPassword = this.maybeRenderIncorrectPassword.bind(this);
   }
 
@@ -39,6 +41,11 @@ class UserRuleListItem extends Component {
     const {password} = this.state;
     const {rule} = this.props;
     this.props.deleteRule(rule.get('uuid'), password);
+  }
+
+  handleEditClick() {
+    const {rule} = this.props;
+    browserHistory.push(`/rule/${rule.get('uuid')}`);
   }
 
   maybeRenderIncorrectPassword() {
@@ -67,7 +74,7 @@ class UserRuleListItem extends Component {
     }
     return (
       <div>
-        <img src={penIcon} className="list-img pen" alt="EDIT" />
+        <img src={penIcon} onClick={this.handleEditClick} className="list-img pen" alt="EDIT" />
         <img src={trashIcon} onClick={this.toggleShowDeleteRule} className="list-img trashcan" alt="DELETE" />
       </div>
     );
