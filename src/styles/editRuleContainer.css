@@ -9,13 +9,27 @@
 }
 
 .form-wrapper input {
+    padding-left: 10px;
+    font-size: 1rem;
     margin-left: 5px;
-    height: 20px;
-    flex-grow: 2;
+    height: 25px;
+    flex-grow: 3;
+}
+
+.form-wrapper span {
+    flex-grow: 1;
+    flex-basis: 5%;
+    line-height: 25px;
 }
 
 .cancel-btn {
     background-color: #d1852e;
+    border: 2px solid #4BA3C3;
+    color: white;
+}
+
+.submit-btn {
+    background-color: #175676;
     border: 2px solid #4BA3C3;
     color: white;
 }

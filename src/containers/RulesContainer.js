@@ -33,6 +33,9 @@ class UsersContainer extends Component {
       }
       return <div className="big-message">No current rules</div>;
     }
+    if (rulesRequestStatus === RequestStatusTypes.FAILED) {
+      return <div className="big-message">Failed to load rules. Try refreshing</div>;
+    }
     return <div className="big-message">Loading rules...</div>;
   }
 

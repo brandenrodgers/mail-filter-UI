@@ -61,3 +61,8 @@ input {
     border-radius: 2px;
     border: none;
 }
+
+button:disabled {
+    background-color: gainsboro !important;
+    cursor: not-allowed !important;
+}

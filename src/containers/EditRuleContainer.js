@@ -24,6 +24,8 @@ class EditRuleContainer extends Component {
     this.handleSourceChange = this.handleSourceChange.bind(this);
     this.handleTargetChange = this.handleTargetChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.isButtonDisabled = this.isButtonDisabled.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   handleCancelClick() {
@@ -50,11 +52,36 @@ class EditRuleContainer extends Component {
     this.setState({password: evt.target.value});
   }
 
+  handleFormSubmit() {
+    // const {password, email, server, source, target} = this.state;
+    const {rule} = this.props;
+    if (rule.has('uuid')) {
+      // TODO update the rule using uuid
+      console.log('updating the existing rule');
+    } else {
+      // TODO add new rule
+      console.log('making a new rule');
+    }
+    browserHistory.push('/home');
+  };
+
+  isButtonDisabled() {
+    const {password, email, server, source, target} = this.state;
+    return password.length === 0 ||
+        email.length === 0 ||
+        server.length === 0 ||
+        source.length === 0 ||
+        target.length === 0;
+  }
+
   renderFormSubmitButton() {
     const {rule} = this.props;
     return (
       <div className="flex-end-wrapper">
-        <button className="large-btn flex-basis-40 m-right-20">
+        <button
+          className="large-btn submit-btn flex-basis-40 m-right-20"
+          onClick={this.handleFormSubmit}
+          disabled={this.isButtonDisabled()}>
           {rule.has('uuid') ? 'Update Rule' : 'Create Rule'}
         </button>
       </div>
