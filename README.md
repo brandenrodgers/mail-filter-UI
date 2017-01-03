@@ -1,4 +1,4 @@
-# Active mail filtering
+# Active mail filtering UI
 
 A UI for this project: https://github.com/kfrodgers/active-mail-filter
 
