@@ -3,7 +3,7 @@ import {Map} from 'immutable';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import '../styles/editRuleContainer.css';
-import {addNewRule, updateRule} from '../actions/rulesActions';
+import {addNewRule, updateRule, getFoldersForUser} from '../actions/rulesActions';
 import {getRuleByUuid} from '../selectors/rulesSelectors';
 
 class EditRuleContainer extends Component {
@@ -127,7 +127,8 @@ class EditRuleContainer extends Component {
 EditRuleContainer.propTypes = {
   rule: PropTypes.instanceOf(Map),
   addNewRule: PropTypes.func.isRequired,
-  editRule: PropTypes.func.isRequired
+  updateRule: PropTypes.func.isRequired,
+  getFoldersForUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, params) => {
@@ -138,5 +139,6 @@ const mapStateToProps = (state, params) => {
 
 export default connect(mapStateToProps, {
   addNewRule,
-  updateRule
+  updateRule,
+  getFoldersForUser
 })(EditRuleContainer);

@@ -27,6 +27,34 @@ export const getRulesList = () => {
   }
 };
 
+export const getFoldersForUser = (user, password, mail_server) => {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.FOLDER_LIST_REQUESTED,
+      mail_server
+    });
+    axios.post(`http://raspberrypi:5000/folders`, {user, password, mail_server}, {
+        auth: {
+          username: 'admin',
+          password: 'dangerous'
+        }
+      })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.FOLDER_LIST_RECEIVED,
+          folders: response.data,
+          mail_server
+        })
+      })
+      .catch(() => {
+        dispatch({
+          type: actionTypes.FOLDER_LIST_FAILED,
+          mail_server
+        })
+      })
+  }
+};
+
 export const addNewRule = (rule) => {
   return (dispatch) => {
     dispatch({
