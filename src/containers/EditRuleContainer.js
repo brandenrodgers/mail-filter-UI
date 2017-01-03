@@ -3,6 +3,7 @@ import {Map} from 'immutable';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import '../styles/editRuleContainer.css';
+import {addNewRule, updateRule} from '../actions/rulesActions';
 import {getRuleByUuid} from '../selectors/rulesSelectors';
 
 class EditRuleContainer extends Component {
@@ -13,7 +14,7 @@ class EditRuleContainer extends Component {
     this.state = {
       password: '',
       email: rule.get('email') || '',
-      server: rule.get('mail_server') || '',
+      mail_server: rule.get('mail_server') || '',
       source: rule.get('source') || '',
       target: rule.get('target') || ''
     };
@@ -37,7 +38,7 @@ class EditRuleContainer extends Component {
   }
 
   handleServerChange(evt) {
-    this.setState({server: evt.target.value});
+    this.setState({mail_server: evt.target.value});
   }
 
   handleSourceChange(evt) {
@@ -53,25 +54,23 @@ class EditRuleContainer extends Component {
   }
 
   handleFormSubmit() {
-    // const {password, email, server, source, target} = this.state;
+    const {password, email, mail_server, source, target} = this.state;
     const {rule} = this.props;
     if (rule.has('uuid')) {
-      // TODO update the rule using uuid
-      console.log('updating the existing rule');
+      this.props.updateRule(rule.get('uuid'), {password, email, mail_server, source, target});
     } else {
-      // TODO add new rule
-      console.log('making a new rule');
+      this.props.addNewRule({password, email, mail_server, source, target});
     }
     browserHistory.push('/home');
   };
 
   isButtonDisabled() {
-    const {password, email, server, source, target} = this.state;
+    const {password, email, mail_server, source, target} = this.state;
     return password.length === 0 ||
-        email.length === 0 ||
-        server.length === 0 ||
-        source.length === 0 ||
-        target.length === 0;
+      email.length === 0 ||
+      mail_server.length === 0 ||
+      source.length === 0 ||
+      target.length === 0;
   }
 
   renderFormSubmitButton() {
@@ -89,7 +88,7 @@ class EditRuleContainer extends Component {
   }
 
   render() {
-    const {password, email, server, source, target} = this.state;
+    const {password, email, mail_server, source, target} = this.state;
     return (
       <div className="centered-content">
         <div className="flex-end-wrapper">
@@ -104,7 +103,7 @@ class EditRuleContainer extends Component {
           </div>
           <div className="flex-wrapper m-all-20">
             <span>Server: </span>
-            <input type="text" value={server} onChange={this.handleServerChange} />
+            <input type="text" value={mail_server} onChange={this.handleServerChange} />
           </div>
           <div className="flex-wrapper m-all-20">
             <span>Source: </span>
@@ -126,7 +125,9 @@ class EditRuleContainer extends Component {
 }
 
 EditRuleContainer.propTypes = {
-  rule: PropTypes.instanceOf(Map)
+  rule: PropTypes.instanceOf(Map),
+  addNewRule: PropTypes.func.isRequired,
+  editRule: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, params) => {
@@ -135,4 +136,7 @@ const mapStateToProps = (state, params) => {
   };
 };
 
-export default connect(mapStateToProps)(EditRuleContainer);
+export default connect(mapStateToProps, {
+  addNewRule,
+  updateRule
+})(EditRuleContainer);

@@ -5,6 +5,8 @@ import {Map, fromJS} from 'immutable';
 const initialState = {
   rulesListRequestStatus: RequestStatusTypes.UNINITIALIZED,
   deleteRequestStatuses: new Map(),
+  addRuleRequestStatus: RequestStatusTypes.UNINITIALIZED,
+  updateRuleRequestStatus: RequestStatusTypes.UNINITIALIZED,
   users: new Map(),
   errors: new Map()
 };
@@ -20,6 +22,18 @@ export default (state = initialState, action) => {
       return {...state, errors: action.error, rulesListRequestStatus: RequestStatusTypes.FAILED};
     case actionTypes.RULE_DELETE_REQUESTED:
       return {...state, deleteRequestStatuses: state.deleteRequestStatuses.set(action.uuid, RequestStatusTypes.PENDING)};
+    case actionTypes.ADD_RULE_REQUESTED:
+      return {...state, addRuleRequestStatus: RequestStatusTypes.PENDING};
+    case actionTypes.ADD_RULE_SUCCEEDED:
+      return {...state, addRuleRequestStatus: RequestStatusTypes.SUCCEEDED};
+    case actionTypes.ADD_RULE_FAILED:
+      return {...state, addRuleRequestStatus: RequestStatusTypes.FAILED};
+    case actionTypes.UPDATE_RULE_REQUESTED:
+      return {...state, updateRuleRequestStatus: RequestStatusTypes.PENDING};
+    case actionTypes.UPDATE_RULE_SUCCEEDED:
+      return {...state, updateRuleRequestStatus: RequestStatusTypes.SUCCEEDED};
+    case actionTypes.UPDATE_RULE_FAILED:
+      return {...state, updateRuleRequestStatus: RequestStatusTypes.FAILED};
     case actionTypes.RULE_DELETE_SUCCEEDED:
       let newUsers = state.users.map(user => {
         return user.filter(data => {

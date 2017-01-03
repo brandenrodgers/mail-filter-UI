@@ -27,6 +27,56 @@ export const getRulesList = () => {
   }
 };
 
+export const addNewRule = (rule) => {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.ADD_RULE_REQUESTED
+    });
+    axios.post(`http://raspberrypi:5000/add`, {rule}, {
+        auth: {
+          username: 'admin',
+          password: 'dangerous'
+        }
+      })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.ADD_RULE_SUCCEEDED,
+          rule: response.data
+        })
+      })
+      .catch(() => {
+        dispatch({
+          type: actionTypes.ADD_RULE_FAILED
+        })
+      })
+  }
+};
+
+export const updateRule = (id, rule) => {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.UPDATE_RULE_REQUESTED
+    });
+    axios.post(`http://raspberrypi:5000/update`, {rule}, {
+        auth: {
+          username: 'admin',
+          password: 'dangerous'
+        }
+      })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.UPDATE_RULE_SUCCEEDED,
+          rule: response.data
+        })
+      })
+      .catch(() => {
+        dispatch({
+          type: actionTypes.UPDATE_RULE_FAILED
+        })
+      })
+  }
+};
+
 export const deleteRule = (uuid, password) => {
   return (dispatch) => {
     dispatch({
