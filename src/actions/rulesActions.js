@@ -57,7 +57,7 @@ export const updateRule = (id, rule) => {
     dispatch({
       type: actionTypes.UPDATE_RULE_REQUESTED
     });
-    axios.post(`http://raspberrypi:5000/update`, {rule}, {
+    axios.post(`http://raspberrypi:5000/update/${id}`, {rule}, {
         auth: {
           username: 'admin',
           password: 'dangerous'
