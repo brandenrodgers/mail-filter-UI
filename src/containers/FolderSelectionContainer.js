@@ -1,10 +1,14 @@
 import React, {Component, PropTypes} from 'react';
-import {List} from 'immutable';
+import {Map} from 'immutable';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
+import RequestStatusTypes from '../utils/RequestStatusTypes';
 import '../styles/editRuleContainer.css';
 import {addNewRule, updateRule, getFoldersForUser} from '../actions/rulesActions';
-import {getFoldersForUserByEmail} from '../selectors/rulesSelectors';
+import {
+  getFoldersForUserByEmail,
+  getFoldersForUserByEmailRequestStatus
+} from '../selectors/rulesSelectors';
 
 class FolderSelectionContainer extends Component {
 
@@ -25,8 +29,11 @@ class FolderSelectionContainer extends Component {
   }
 
   componentWillMount() {
-    const {email, password, mail_server} = this.props;
-    this.props.getFoldersForUser(email, password, mail_server);
+    const {email, password, mail_server, userFoldersRequestStatus} = this.props;
+    if (userFoldersRequestStatus === RequestStatusTypes.UNINITIALIZED ||
+      userFoldersRequestStatus === RequestStatusTypes.FAILED) {
+      this.props.getFoldersForUser(email, password, mail_server);
+    }
   }
 
   handleSourceChange(evt) {
@@ -73,9 +80,13 @@ class FolderSelectionContainer extends Component {
     return (
       <select value={source} onChange={this.handleSourceChange}>
         <option value="" disabled>Select a folder</option>
-        {userFolders.map(folder => {
+        {userFolders.entrySeq().map(([folder, isDangerous])=> {
           if (folder !== target) {
-            return <option key={folder} value={folder}>{folder}</option>;
+            return (
+              <option key={folder} value={folder}>
+                {folder}{isDangerous ? '' : '  (empty)'}
+              </option>
+            );
           }
           return null;
         })}
@@ -89,9 +100,16 @@ class FolderSelectionContainer extends Component {
     return (
       <select value={target} onChange={this.handleTargetChange}>
         <option value="" disabled>Select a folder</option>
-        {userFolders.map(folder => {
+        {userFolders.entrySeq().map(([folder, isDangerous]) => {
           if (folder !== source) {
-            return <option key={folder} value={folder}>{folder}</option>;
+            return (
+              <option
+                key={folder}
+                value={folder}
+                className={isDangerous ? 'dangerous-option' : 'safe-option'}>
+                {folder}{isDangerous ? '' : '  (empty)'}
+              </option>
+            );
           }
           return null;
         })}
@@ -100,22 +118,33 @@ class FolderSelectionContainer extends Component {
   }
 
   render() {
+    const {userFoldersRequestStatus} = this.props;
+    if (userFoldersRequestStatus === RequestStatusTypes.SUCCEEDED) {
+      return (
+        <div className="centered-content">
+          <div className="form-wrapper m-top-20">
+            <div className="flex-wrapper m-all-20">
+              <span>Source: </span>
+              {this.renderSourceSelect()}
+            </div>
+            <div className="flex-wrapper m-all-20">
+              <span>Target: </span>
+              {this.renderTargetSelect()}
+            </div>
+            {this.renderFormSubmitButton()}
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="centered-content">
         <div className="form-wrapper m-top-20">
-          <div className="flex-wrapper m-all-20">
-            <span>Source: </span>
-            {this.renderSourceSelect()}
-          </div>
-          <div className="flex-wrapper m-all-20">
-            <span>Target: </span>
-            {this.renderTargetSelect()}
-          </div>
-          {this.renderFormSubmitButton()}
+          {userFoldersRequestStatus === RequestStatusTypes.FAILED ? 'Invalid Credentials' : 'Loading folders...'}
         </div>
       </div>
     );
   }
+
 }
 
 FolderSelectionContainer.propTypes = {
@@ -125,7 +154,8 @@ FolderSelectionContainer.propTypes = {
   source: PropTypes.string,
   target: PropTypes.string,
   uuid: PropTypes.string,
-  userFolders: PropTypes.instanceOf(List).isRequired,
+  userFolders: PropTypes.instanceOf(Map).isRequired,
+  userFoldersRequestStatus: PropTypes.string.isRequired,
   addNewRule: PropTypes.func.isRequired,
   updateRule: PropTypes.func.isRequired,
   getFoldersForUser: PropTypes.func.isRequired
@@ -133,7 +163,8 @@ FolderSelectionContainer.propTypes = {
 
 const mapStateToProps = (state, params) => {
   return {
-    userFolders: getFoldersForUserByEmail(state, params)
+    userFolders: getFoldersForUserByEmail(state, params),
+    userFoldersRequestStatus: getFoldersForUserByEmailRequestStatus(state, params)
   };
 };
 

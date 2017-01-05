@@ -20,6 +20,14 @@ input, select {
     flex-grow: 3;
 }
 
+select .dangerous-option {
+    color: yellow;
+}
+
+select .safe-option {
+    color: green;
+}
+
 .form-wrapper span {
     flex-grow: 1;
     flex-basis: 5%;
