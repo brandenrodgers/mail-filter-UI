@@ -3,6 +3,8 @@ import {Map, List} from 'immutable';
 import '../styles/usersList.css';
 import RequestStatusTypes from '../utils/RequestStatusTypes';
 import UserRuleListItem from './UserRuleListItem';
+import upArrowIcon from '../images/up_arrow.png'
+import downArrowIcon from '../images/down_arrow.png';
 
 class UserRuleList extends Component {
 
@@ -50,6 +52,7 @@ class UserRuleList extends Component {
       <div className={`user-list-item ${showItems ? '' : 'small-margin'}`}>
         <div className="user-list-header" onClick={this.toggleShowItem}>
           {username}
+          <img src={showItems ? upArrowIcon : downArrowIcon} className="arrow-icon" alt={showItems ? '-' : '+'}/>
         </div>
         {this.renderRuleGroup()}
       </div>
