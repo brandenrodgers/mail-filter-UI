@@ -71,11 +71,10 @@ class FolderSelectionContainer extends Component {
     const {source, target} = this.state;
     const {userFolders} = this.props;
     return (
-      <select value={source.toLowerCase()} onChange={this.handleSourceChange}>
+      <select value={source} onChange={this.handleSourceChange}>
         <option value="" disabled>Select a folder</option>
         {userFolders.map(folder => {
-          folder = folder.toLowerCase();
-          if (folder !== target.toLowerCase()) {
+          if (folder !== target) {
             return <option key={folder} value={folder}>{folder}</option>;
           }
           return null;
@@ -88,11 +87,10 @@ class FolderSelectionContainer extends Component {
     const {source, target} = this.state;
     const {userFolders} = this.props;
     return (
-      <select value={target.toLowerCase()} onChange={this.handleTargetChange}>
+      <select value={target} onChange={this.handleTargetChange}>
         <option value="" disabled>Select a folder</option>
         {userFolders.map(folder => {
-          folder = folder.toLowerCase();
-          if (folder !== source.toLowerCase()) {
+          if (folder !== source) {
             return <option key={folder} value={folder}>{folder}</option>;
           }
           return null;
