@@ -31,7 +31,7 @@ export const getFoldersForUser = (user, password, mail_server) => {
   return (dispatch) => {
     dispatch({
       type: actionTypes.FOLDER_LIST_REQUESTED,
-      mail_server
+      user
     });
     axios.post(`http://raspberrypi:5000/folders`, {user, password, mail_server}, {
         auth: {
@@ -42,14 +42,14 @@ export const getFoldersForUser = (user, password, mail_server) => {
       .then((response) => {
         dispatch({
           type: actionTypes.FOLDER_LIST_RECEIVED,
-          folders: response.data,
-          mail_server
+          folders: response.data.data,
+          user
         })
       })
       .catch(() => {
         dispatch({
           type: actionTypes.FOLDER_LIST_FAILED,
-          mail_server
+          user
         })
       })
   }
@@ -60,7 +60,7 @@ export const addNewRule = (rule) => {
     dispatch({
       type: actionTypes.ADD_RULE_REQUESTED
     });
-    axios.post(`http://raspberrypi:5000/add`, {rule}, {
+    axios.put(`http://raspberrypi:5000/add`, {...rule, user: rule.email}, {
         auth: {
           username: 'admin',
           password: 'dangerous'
@@ -69,7 +69,7 @@ export const addNewRule = (rule) => {
       .then((response) => {
         dispatch({
           type: actionTypes.ADD_RULE_SUCCEEDED,
-          rule: response.data
+          rule: response.data.data
         })
       })
       .catch(() => {
@@ -85,7 +85,7 @@ export const updateRule = (id, rule) => {
     dispatch({
       type: actionTypes.UPDATE_RULE_REQUESTED
     });
-    axios.post(`http://raspberrypi:5000/update/${id}`, {rule}, {
+    axios.put(`http://raspberrypi:5000/update/${id}`, {...rule}, {
         auth: {
           username: 'admin',
           password: 'dangerous'
@@ -94,7 +94,7 @@ export const updateRule = (id, rule) => {
       .then((response) => {
         dispatch({
           type: actionTypes.UPDATE_RULE_SUCCEEDED,
-          rule: response.data
+          rule: response.data.data
         })
       })
       .catch(() => {

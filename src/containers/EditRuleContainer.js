@@ -3,7 +3,7 @@ import {Map} from 'immutable';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import '../styles/editRuleContainer.css';
-import {addNewRule, updateRule, getFoldersForUser} from '../actions/rulesActions';
+import FolderSelectionContainer from './FolderSelectionContainer';
 import {getRuleByUuid} from '../selectors/rulesSelectors';
 
 class EditRuleContainer extends Component {
@@ -15,18 +15,24 @@ class EditRuleContainer extends Component {
       password: '',
       email: rule.get('email') || '',
       mail_server: rule.get('mail_server') || '',
-      source: rule.get('source') || '',
-      target: rule.get('target') || ''
+      showFolders: false
     };
     this.handleCancelClick = this.handleCancelClick.bind(this);
-    this.renderFormSubmitButton = this.renderFormSubmitButton.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleServerChange = this.handleServerChange.bind(this);
-    this.handleSourceChange = this.handleSourceChange.bind(this);
-    this.handleTargetChange = this.handleTargetChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.isButtonDisabled = this.isButtonDisabled.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleShowFoldersClick = this.handleShowFoldersClick.bind(this);
+    this.renderFolderSelector = this.renderFolderSelector.bind(this);
+    this.renderShowFoldersButton = this.renderShowFoldersButton.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {rule} = this.props;
+    const {rule: nextRule} = nextProps;
+    if (nextRule.size > rule.size) {
+      this.setState({email: nextRule.get('email'), mail_server: nextRule.get('mail_server')});
+    }
   }
 
   handleCancelClick() {
@@ -41,54 +47,54 @@ class EditRuleContainer extends Component {
     this.setState({mail_server: evt.target.value});
   }
 
-  handleSourceChange(evt) {
-    this.setState({source: evt.target.value});
-  }
-
-  handleTargetChange(evt) {
-    this.setState({target: evt.target.value});
-  }
-
   handlePasswordChange(evt) {
     this.setState({password: evt.target.value});
   }
 
-  handleFormSubmit() {
-    const {password, email, mail_server, source, target} = this.state;
-    const {rule} = this.props;
-    if (rule.has('uuid')) {
-      this.props.updateRule(rule.get('uuid'), {password, email, mail_server, source, target});
-    } else {
-      this.props.addNewRule({password, email, mail_server, source, target});
-    }
-    browserHistory.push('/home');
-  };
-
-  isButtonDisabled() {
-    const {password, email, mail_server, source, target} = this.state;
-    return password.length === 0 ||
-      email.length === 0 ||
-      mail_server.length === 0 ||
-      source.length === 0 ||
-      target.length === 0;
+  handleShowFoldersClick() {
+    const {showFolders} = this.state;
+    this.setState({showFolders: !showFolders});
   }
 
-  renderFormSubmitButton() {
-    const {rule} = this.props;
+  isButtonDisabled() {
+    const {email, password, mail_server} = this.state;
+    return email.length === 0 || password.length === 0 || mail_server.length === 0;
+  }
+
+  renderShowFoldersButton() {
+    const {showFolders} = this.state;
     return (
-      <div className="flex-end-wrapper">
+      <div className="flex-center-wrapper">
         <button
-          className="large-btn submit-btn flex-basis-40 m-right-20"
-          onClick={this.handleFormSubmit}
+          className="large-btn submit-btn flex-basis-40 m-all-20"
+          onClick={this.handleShowFoldersClick}
           disabled={this.isButtonDisabled()}>
-          {rule.has('uuid') ? 'Update Rule' : 'Create Rule'}
+          {showFolders ? 'Edit credentials' : 'Select folders'}
         </button>
       </div>
     );
   }
 
+  renderFolderSelector() {
+    const {email, password, mail_server, showFolders} = this.state;
+    const {rule} = this.props;
+    if (showFolders) {
+      return (
+        <FolderSelectionContainer
+          email={email}
+          password={password}
+          mail_server={mail_server}
+          source={rule.get('source')}
+          target={rule.get('target')}
+          uuid={rule.get('uuid')}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
-    const {password, email, mail_server, source, target} = this.state;
+    const {password, email, mail_server, showFolders} = this.state;
     return (
       <div className="centered-content">
         <div className="flex-end-wrapper">
@@ -96,49 +102,35 @@ class EditRuleContainer extends Component {
             Cancel
           </button>
         </div>
-        <div className="form-wrapper m-top-20">
+        <div className={`${showFolders ? 'disabled-wrapper' : ''} form-wrapper m-top-20`}>
           <div className="flex-wrapper m-all-20">
             <span>Email: </span>
-            <input type="text" value={email} onChange={this.handleEmailChange} />
-          </div>
-          <div className="flex-wrapper m-all-20">
-            <span>Server: </span>
-            <input type="text" value={mail_server} onChange={this.handleServerChange} />
-          </div>
-          <div className="flex-wrapper m-all-20">
-            <span>Source: </span>
-            <input type="text" value={source} onChange={this.handleSourceChange} />
-          </div>
-          <div className="flex-wrapper m-all-20">
-            <span>Target: </span>
-            <input type="text" value={target} onChange={this.handleTargetChange} />
+            <input type="text" value={email} disabled={showFolders} onChange={this.handleEmailChange} />
           </div>
           <div className="flex-wrapper m-all-20">
             <span>Password: </span>
-            <input type="password" value={password} onChange={this.handlePasswordChange} />
+            <input type="password" value={password} disabled={showFolders} onChange={this.handlePasswordChange} />
           </div>
-          {this.renderFormSubmitButton()}
+          <div className="flex-wrapper m-all-20">
+            <span>Server: </span>
+            <input type="text" value={mail_server} disabled={showFolders} onChange={this.handleServerChange} />
+          </div>
         </div>
+        {this.renderShowFoldersButton()}
+        {this.renderFolderSelector()}
       </div>
     );
   }
 }
 
 EditRuleContainer.propTypes = {
-  rule: PropTypes.instanceOf(Map),
-  addNewRule: PropTypes.func.isRequired,
-  updateRule: PropTypes.func.isRequired,
-  getFoldersForUser: PropTypes.func.isRequired
+  rule: PropTypes.instanceOf(Map)
 };
 
-const mapStateToProps = (state, params) => {
+const mapStateToProps = (state, {params}) => {
   return {
     rule: getRuleByUuid(state, params)
   };
 };
 
-export default connect(mapStateToProps, {
-  addNewRule,
-  updateRule,
-  getFoldersForUser
-})(EditRuleContainer);
+export default connect(mapStateToProps)(EditRuleContainer);

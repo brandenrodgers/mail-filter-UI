@@ -14,6 +14,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  let newUsers = state.users;
   switch (action.type) {
     case actionTypes.RULE_LIST_REQUESTED:
       return {
@@ -36,19 +37,19 @@ export default (state = initialState, action) => {
     case actionTypes.FOLDER_LIST_REQUESTED:
       return {
         ...state,
-        folderListRequestStatuses: state.folderListRequestStatuses.set(action.mail_server, RequestStatusTypes.PENDING)
+        folderListRequestStatuses: state.folderListRequestStatuses.set(action.user, RequestStatusTypes.PENDING)
       };
     case actionTypes.FOLDER_LIST_RECEIVED:
       const folders = fromJS(action.folders);
       return {
         ...state,
-        folders: state.folders.set(action.mail_server, folders),
-        folderListRequestStatuses: state.folderListRequestStatuses.set(action.mail_server, RequestStatusTypes.SUCCEEDED)
+        folders: state.folders.set(action.user, folders),
+        folderListRequestStatuses: state.folderListRequestStatuses.set(action.user, RequestStatusTypes.SUCCEEDED)
       };
     case actionTypes.FOLDER_LIST_FAILED:
       return {
         ...state,
-        folderListRequestStatuses: state.folderListRequestStatuses.set(action.mail_server, RequestStatusTypes.FAILED)
+        folderListRequestStatuses: state.folderListRequestStatuses.set(action.user, RequestStatusTypes.FAILED)
       };
     case actionTypes.RULE_DELETE_REQUESTED:
       return {
@@ -61,8 +62,14 @@ export default (state = initialState, action) => {
         addRuleRequestStatus:RequestStatusTypes.PENDING
       };
     case actionTypes.ADD_RULE_SUCCEEDED:
+      if (newUsers.has(action.rule.email)) {
+        newUsers = newUsers.set(action.rule.email, newUsers.get(action.rule.email).push(fromJS(action.rule)));
+      } else {
+        newUsers = newUsers.set(action.rule.email, fromJS([action.rule]));
+      }
       return {
         ...state,
+        users: newUsers,
         addRuleRequestStatus: RequestStatusTypes.SUCCEEDED
       };
     case actionTypes.ADD_RULE_FAILED:
@@ -76,8 +83,17 @@ export default (state = initialState, action) => {
         updateRuleRequestStatus: RequestStatusTypes.PENDING
       };
     case actionTypes.UPDATE_RULE_SUCCEEDED:
+      newUsers = newUsers.map(user => {
+        return user.map(rule => {
+          if (rule.get('uuid') === action.rule.uuid) {
+            return fromJS(action.rule);
+          }
+          return rule;
+        });
+      });
       return {
         ...state,
+        users: newUsers,
         updateRuleRequestStatus: RequestStatusTypes.SUCCEEDED
       };
     case actionTypes.UPDATE_RULE_FAILED:
@@ -86,7 +102,7 @@ export default (state = initialState, action) => {
         updateRuleRequestStatus: RequestStatusTypes.FAILED
       };
     case actionTypes.RULE_DELETE_SUCCEEDED:
-      let newUsers = state.users.map(user => {
+      newUsers = newUsers.map(user => {
         return user.filter(data => {
           return data.get('uuid') !== action.uuid;
         });

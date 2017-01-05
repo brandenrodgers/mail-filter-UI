@@ -30,6 +30,11 @@
     justify-content: flex-end;
 }
 
+.flex-center-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .full-flex-basis {
     flex-basis: 100%;
 }
@@ -55,11 +60,15 @@
     border: 2px solid #175676;
 }
 
-input {
+input, select {
     line-height: 18px;
     margin-right: 5px;
     border-radius: 2px;
     border: none;
+}
+
+input:disabled {
+    cursor: not-allowed !important;
 }
 
 button:disabled {
