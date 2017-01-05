@@ -82,7 +82,9 @@ button:hover {
 }
 
 button.delete {
- background-color: #BA324F;
+    height: 25px;
+    background-color: #BA324F;
+    border: 1px solid #BA324F;
 }
 
 button.delete:disabled {
@@ -91,7 +93,9 @@ button.delete:disabled {
 }
 
 button.cancel {
+    height: 25px;
     background-color: #175676;
+    border: 1px solid #4BA3C3;
 }
 
 .incorrect-password {
